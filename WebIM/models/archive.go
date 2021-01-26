@@ -18,6 +18,7 @@ import (
 	"container/list"
 )
 
+//用int类型重新定义客户端产生的事件类型
 type EventType int
 
 const (
