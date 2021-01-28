@@ -21,12 +21,14 @@ import (
 //用int类型重新定义客户端产生的事件类型
 type EventType int
 
+//三种事件类型：加入、离开、消息
 const (
 	EVENT_JOIN = iota
 	EVENT_LEAVE
 	EVENT_MESSAGE
 )
 
+//定义事件结构（事件类型、用户名、事件、内容）
 type Event struct {
 	Type      EventType // JOIN, LEAVE, MESSAGE
 	User      string
@@ -34,12 +36,15 @@ type Event struct {
 	Content   string
 }
 
+//用来保存服务器上能够保存的消息记录，保存最新的20条
 const archiveSize = 20
 
 // Event archives.
+//事件归档保存
 var archive = list.New()
 
 // NewArchive saves new event to archive list.
+//将一个新的事件保存在archive中，若事件的个数已经大于等于20则删除第一个，只保留最新的20个
 func NewArchive(event Event) {
 	if archive.Len() >= archiveSize {
 		archive.Remove(archive.Front())
@@ -47,7 +52,8 @@ func NewArchive(event Event) {
 	archive.PushBack(event)
 }
 
-// GetEvents returns all events after lastReceived.
+// GetEvents returns all events after lastReceived
+//根据传过来的时间戳返回时间戳之后的所有事件消息
 func GetEvents(lastReceived int) []Event {
 	events := make([]Event, 0, archive.Len())
 	for event := archive.Front(); event != nil; event = event.Next() {
