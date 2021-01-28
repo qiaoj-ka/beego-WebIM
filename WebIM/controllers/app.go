@@ -25,9 +25,11 @@ var langTypes []string // Languages that are supported.
 
 func init() {
 	// Initialize language type list.
+	//从配置文件中获取语言类型列表
 	langTypes = strings.Split(beego.AppConfig.String("lang_types"), "|")
 
 	// Load locale files according to language types.
+	//根据语言类型加载语言环境文件
 	for _, lang := range langTypes {
 		beego.Trace("Loading language: " + lang)
 		if err := i18n.SetMessage(lang, "conf/"+"locale_"+lang+".ini"); err != nil {

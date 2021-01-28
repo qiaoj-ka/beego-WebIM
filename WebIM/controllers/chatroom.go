@@ -19,8 +19,8 @@ import (
 	"time"
 
 	"github.com/astaxie/beego"
-	"github.com/gorilla/websocket"
 	"github.com/beego/samples/WebIM/models"
+	"github.com/gorilla/websocket"
 )
 
 type Subscription struct {
@@ -46,11 +46,11 @@ type Subscriber struct {
 }
 
 var (
-	// Channel for new join users.
+	// Channel for new join users.订阅者
 	subscribe = make(chan Subscriber, 10)
-	// Channel for exit users.
+	// Channel for exit users.未订阅者
 	unsubscribe = make(chan string, 10)
-	// Send events here to publish them.
+	// Send events here to publish them.进行发布的消息
 	publish = make(chan models.Event, 10)
 	// Long polling waiting list.
 	waitingList = list.New()
@@ -70,6 +70,7 @@ func chatroom() {
 			} else {
 				beego.Info("Old user:", sub.Name, ";WebSocket:", sub.Conn != nil)
 			}
+		//当有新的事件消息到达时，执行如下
 		case event := <-publish:
 			// Notify waiting list.
 			for ch := waitingList.Back(); ch != nil; ch = ch.Prev() {
